@@ -20,6 +20,7 @@ use crate::params::KeystoreParams;
 use crate::params::NetworkParams;
 use crate::params::SharedParams;
 use crate::params::TransactionPoolParams;
+use crate::params::OffchainWorkerParams;
 use crate::CliConfiguration;
 use regex::Regex;
 use sc_service::{
@@ -27,19 +28,18 @@ use sc_service::{
 	ChainSpec, Role,
 };
 use sc_telemetry::TelemetryEndpoints;
-use std::net::SocketAddr;
-use structopt::{clap::arg_enum, StructOpt};
 
-arg_enum! {
-	/// Whether off-chain workers are enabled.
-	#[allow(missing_docs)]
-	#[derive(Debug, Clone)]
-	pub enum OffchainWorkerEnabled {
-		Always,
-		Never,
-		WhenValidating,
-	}
-}
+use crate::VersionInfo;
+use crate::error;
+use crate::runtime::run_service_until_exit;
+
+/// The maximum number of characters for a node name.
+const NODE_NAME_MAX_LENGTH: usize = 32;
+
+/// default sub directory for the key store
+const DEFAULT_KEYSTORE_CONFIG_PATH : &'static str = "keystore";
+
+
 
 /// The `run` command used to run a node.
 #[derive(Debug, StructOpt, Clone)]
@@ -165,17 +165,9 @@ pub struct RunCmd {
 	#[structopt(long = "telemetry-url", value_name = "URL VERBOSITY", parse(try_from_str = parse_telemetry_endpoints))]
 	pub telemetry_endpoints: Vec<(String, u8)>,
 
-	/// Should execute offchain workers on every block.
-	///
-	/// By default it's only enabled for nodes that are authoring new blocks.
-	#[structopt(
-		long = "offchain-worker",
-		value_name = "ENABLED",
-		possible_values = &OffchainWorkerEnabled::variants(),
-		case_insensitive = true,
-		default_value = "WhenValidating"
-	)]
-	pub offchain_worker: OffchainWorkerEnabled,
+	#[allow(missing_docs)]
+	#[structopt(flatten)]
+	pub offchain_worker_params: OffchainWorkerParams,
 
 	#[allow(missing_docs)]
 	#[structopt(flatten)]
@@ -292,6 +284,10 @@ impl CliConfiguration for RunCmd {
 		Some(&self.keystore_params)
 	}
 
+	fn offchain_worker_params(&self) -> Option<&OffchainWorkerParams> {
+		Some(&self.offchain_worker_params)
+	}
+
 	fn node_name(&self) -> Result<String> {
 		let name: String = match (self.name.as_ref(), self.get_keyring()) {
 			(Some(name), _) => name.to_string(),
@@ -307,16 +303,6 @@ impl CliConfiguration for RunCmd {
 		})?;
 
 		Ok(name)
-	}
-
-	fn dev_key_seed(&self, is_dev: bool) -> Result<Option<String>> {
-		Ok(self.get_keyring().map(|a| format!("//{}", a)).or_else(|| {
-			if is_dev && !self.light {
-				Some("//Alice".into())
-			} else {
-				None
-			}
-		}))
 	}
 
 	fn telemetry_endpoints(
@@ -428,13 +414,12 @@ impl CliConfiguration for RunCmd {
 		)?))
 	}
 
-	fn offchain_worker(&self, role: &Role) -> Result<bool> {
-		Ok(match (&self.offchain_worker, role) {
-			(OffchainWorkerEnabled::WhenValidating, Role::Authority { .. }) => true,
-			(OffchainWorkerEnabled::Always, _) => true,
-			(OffchainWorkerEnabled::Never, _) => false,
-			(OffchainWorkerEnabled::WhenValidating, _) => false,
-		})
+	fn offchain_worker_config(&self) -> OffchainWorkerConfig {
+		let is_dev = self.is_dev();
+		let role = self.role(is_dev);
+		self.offchain_worker_params
+			.map(|params| { params.into_config(role) })
+			.or_else(|| { OffchainWorkerConfig::default() })
 	}
 
 	fn transaction_pool(&self) -> Result<TransactionPoolOptions> {

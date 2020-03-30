@@ -19,7 +19,7 @@
 use crate::error::Result;
 use crate::{
 	init_logger, ImportParams, KeystoreParams, NetworkParams, NodeKeyParams,
-	PruningParams, SharedParams, SubstrateCli,
+	OffchainWorkerParams, PruningParams, SharedParams, SubstrateCli,
 };
 use app_dirs::{AppDataType, AppInfo};
 use names::{Generator, Name};
@@ -63,6 +63,11 @@ pub trait CliConfiguration: Sized {
 
 	/// Get the NetworkParams for this object
 	fn network_params(&self) -> Option<&NetworkParams> {
+		None
+	}
+
+	/// Get the OffchainWorkerParams for this object
+	fn offchain_worker_params(&self) -> Option<&OffchainWorkerParams> {
 		None
 	}
 
@@ -278,13 +283,12 @@ pub trait CliConfiguration: Sized {
 		Ok(Default::default())
 	}
 
-	/// Returns `Ok(true)` if offchain worker should be used
+	/// Returns a offchain worker config wrapped in `Ok(_)`
 	///
-	/// By default this is `false`.
-	fn offchain_worker(&self, _role: &Role) -> Result<bool> {
+	/// By default offchain workers are disabled.
+	fn offchain_worker_config(&self) -> Result<OffchainWorkerConfig> {
 		Ok(Default::default())
 	}
-
 	/// Returns `Ok(true)` if authoring should be forced
 	///
 	/// By default this is `false`.
