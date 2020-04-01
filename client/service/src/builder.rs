@@ -53,6 +53,7 @@ use wasm_timer::SystemTime;
 use sc_telemetry::{telemetry, SUBSTRATE_INFO};
 use sp_transaction_pool::{MaintainedTransactionPool, ChainEvent};
 use sp_blockchain;
+use prometheus_endpoint::{register, Gauge, U64, F64, Registry, PrometheusError, Opts, GaugeVec};
 
 pub type BackgroundTask = Pin<Box<dyn Future<Output=()> + Send>>;
 
