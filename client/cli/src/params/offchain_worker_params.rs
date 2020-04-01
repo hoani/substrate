@@ -19,8 +19,8 @@
 //! Offchain worker related configuration parameters.
 //!
 //! A subset of configuration parameters which are relevant to
-//! the inner working of offchain workers. The usage is soley
-//! targetd at handling input parameter parsing providing
+//! the inner working of offchain workers. The usage is solely
+//! targeted at handling input parameter parsing providing
 //! a reasonable abstraction.
 
 use structopt::StructOpt;
@@ -51,10 +51,10 @@ pub struct OffchainWorkerParams {
 
 	/// Allow access to offchain workers indexing API
 	///
-	/// Enables a runtime to write directly to a offchain workers
+	/// Enables runtime to write directly to the offchain worker's
 	/// DB during block import.
     #[structopt(
-        long = "enable-offchain-worker-indexing",
+        long = "enable-offchain-indexing",
         value_name = "ENABLE_OFFCHAIN_WORKER_INDEXING"
     )]
 	pub indexing_enabled: bool,
