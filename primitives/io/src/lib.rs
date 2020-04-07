@@ -957,6 +957,7 @@ pub type SubstrateHostFunctions = (
 	logging::HostFunctions,
 	sandbox::HostFunctions,
 	crate::trie::HostFunctions,
+	offchain_index::HostFunctions,
 );
 
 #[cfg(test)]
