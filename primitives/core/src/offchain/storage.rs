@@ -173,8 +173,7 @@ impl<'i> Iterator for OffchainOverlayedChangesIter<'i> {
     }
 }
 
-impl<'i> OffchainOverlayedChangesIter<'i>
-{
+impl<'i> OffchainOverlayedChangesIter<'i> {
 	/// Create a new iterator based on a refernce to the parent container.
 	pub fn new(container: &'i OffchainOverlayedChanges) -> Self {
 		match container {
