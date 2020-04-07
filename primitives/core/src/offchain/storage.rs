@@ -37,7 +37,7 @@ impl InMemOffchainStorage {
 		self.storage.iter()
 	}
 
-	/// Remove a key and it's associated value from the offchain database.
+	/// Remove a key and its associated value from the offchain database.
 	pub fn remove(&mut self, prefix: &[u8], key: &[u8]) {
 		let key: Vec<u8> = prefix.iter().chain(key).cloned().collect();
 		let _ = self.storage.remove(&key);
@@ -134,7 +134,7 @@ impl OffchainOverlayedChanges {
 		OffchainOverlayedChangesDrain::new(self)
 	}
 
-	/// Remove a key and it's associated value from the offchain database.
+	/// Remove a key and its associated value from the offchain database.
 	pub fn remove(&mut self, prefix: &[u8], key: &[u8]) {
 		if let Self::Enabled(ref mut storage) = self {
 			let key: Vec<u8> = prefix.iter().chain(key).cloned().collect();
