@@ -99,10 +99,6 @@ pub enum OffchainOverlayedChanges {
 	Enabled(HashMap<Vec<u8>, OffchainOverlayedChange>),
 }
 
-/// Create an empty set of overlay changes.
-///
-/// The `Default` impl has to be done manually to avoid requirement of
-/// a `Default` impl for `OffchainOverlayedChange`
 impl Default for OffchainOverlayedChanges {
 	fn default() -> Self {
 		Self::Disabled
@@ -164,13 +160,13 @@ pub struct OffchainOverlayedChangesIter<'i> {
 
 impl<'i> Iterator for OffchainOverlayedChangesIter<'i> {
 	type Item = (&'i Vec<u8>, &'i OffchainOverlayedChange);
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(ref mut iter) = self.inner {
+	fn next(&mut self) -> Option<Self::Item> {
+		if let Some(ref mut iter) = self.inner {
 			iter.next()
 		} else {
 			None
 		}
-    }
+	}
 }
 
 impl<'i> OffchainOverlayedChangesIter<'i> {
@@ -193,13 +189,13 @@ pub struct OffchainOverlayedChangesIntoIter {
 
 impl Iterator for OffchainOverlayedChangesIntoIter {
 	type Item = (Vec<u8>, OffchainOverlayedChange);
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(ref mut iter) = self.inner {
+	fn next(&mut self) -> Option<Self::Item> {
+		if let Some(ref mut iter) = self.inner {
 			iter.next()
 		} else {
 			None
 		}
-    }
+	}
 }
 
 impl OffchainOverlayedChangesIntoIter {
@@ -221,13 +217,13 @@ pub struct OffchainOverlayedChangesDrain<'d> {
 
 impl<'d> Iterator for OffchainOverlayedChangesDrain<'d> {
 	type Item = (Vec<u8>, OffchainOverlayedChange);
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(ref mut iter) = self.inner {
+	fn next(&mut self) -> Option<Self::Item> {
+		if let Some(ref mut iter) = self.inner {
 			iter.next()
 		} else {
 			None
 		}
-    }
+	}
 }
 
 impl<'d> OffchainOverlayedChangesDrain<'d> {
