@@ -133,7 +133,7 @@ where
 	/// storage preifx `sp_offchain::STORAGE_PREFIX` which can
 	/// not be used directly, since it would cause
 	/// a circular dependency.
-	const pub OFFCHAIN_STORAGE_PREFIX : &'static [u8] = b"storage";
+	pub const OFFCHAIN_STORAGE_PREFIX : &'static [u8] = b"storage";
 }
 
 #[cfg(test)]
@@ -168,8 +168,8 @@ where
 
 	fn set_offchain_storage(&mut self, key: &[u8], value: Option<&[u8]>) {
 		match value {
-			Some(value) => self.offchain_overlay.set(OFFCHAIN_STORAGE_PREFIX, key, value),
-			None => self.offchain_overlay.remove(OFFCHAIN_STORAGE_PREFIX, key),
+			Some(value) => self.offchain_overlay.set(Self::OFFCHAIN_STORAGE_PREFIX, key, value),
+			None => self.offchain_overlay.remove(Self::OFFCHAIN_STORAGE_PREFIX, key),
 		}
 	}
 
