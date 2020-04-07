@@ -78,10 +78,6 @@ pub struct Configuration {
 	pub default_heap_pages: Option<u64>,
 	/// Should offchain workers be executed.
 	pub offchain_worker: OffchainWorkerConfig,
-	/// Sentry mode is enabled, the node's role is AUTHORITY but it should not
-	/// actively participate in consensus (i.e. no keystores should be passed to
-	/// consensus modules).
-	pub sentry_mode: bool,
 	/// Enable authoring even when offline.
 	pub force_authoring: bool,
 	/// Disable GRANDPA when running in validator mode

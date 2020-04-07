@@ -30,8 +30,10 @@ pub use crate::params::import_params::*;
 pub use crate::params::keystore_params::*;
 pub use crate::params::network_params::*;
 pub use crate::params::node_key_params::*;
-pub use crate::params::pruning_params::*;
 pub use crate::params::offchain_worker_params::*;
+pub use crate::params::pruning_params::*;
+pub use crate::params::shared_params::*;
+pub use crate::params::transaction_pool_params::*;
 
 /// Wrapper type of `String` that holds an unsigned integer of arbitrary size, formatted as a decimal.
 #[derive(Debug, Clone)]

@@ -23,10 +23,8 @@
 //! a reasonable abstraction.
 
 use structopt::StructOpt;
-use sc_service;
-
 use sc_service::config::OffchainWorkerConfig;
-
+use sc_network::config::Role;
 
 use crate::error;
 use crate::OffchainWorkerEnabled;
@@ -61,13 +59,13 @@ pub struct OffchainWorkerParams {
 
 impl OffchainWorkerParams {
 	/// Load spec to `Configuration` from `OffchainWorkerParams` and spec factory.
-	pub fn into_config<'a>(
+	pub fn offchain_worker(
 		&self,
-        role: sc_service::Roles,
+        role: &Role,
 	) -> error::Result<OffchainWorkerConfig>
 	{
         let enabled = match (&self.enabled, role) {
-			(OffchainWorkerEnabled::WhenValidating, sc_service::Roles::AUTHORITY) => true,
+			(OffchainWorkerEnabled::WhenValidating, Role::Authority { .. }) => true,
 			(OffchainWorkerEnabled::Always, _) => true,
 			(OffchainWorkerEnabled::Never, _) => false,
 			(OffchainWorkerEnabled::WhenValidating, _) => false,

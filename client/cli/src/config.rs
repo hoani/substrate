@@ -25,8 +25,8 @@ use app_dirs::{AppDataType, AppInfo};
 use names::{Generator, Name};
 use sc_service::config::{
 	Configuration, DatabaseConfig, ExecutionStrategies, ExtTransport, KeystoreConfig,
-	NetworkConfiguration, NodeKeyConfig, PrometheusConfig, PruningMode, Role, TelemetryEndpoints,
-	TransactionPoolOptions, WasmExecutionMethod,
+	NetworkConfiguration, NodeKeyConfig, OffchainWorkerConfig, PrometheusConfig, PruningMode,
+	Role, TelemetryEndpoints, TransactionPoolOptions, WasmExecutionMethod,
 };
 use sc_service::{ChainSpec, TracingReceiver};
 use std::future::Future;
@@ -286,9 +286,12 @@ pub trait CliConfiguration: Sized {
 	/// Returns a offchain worker config wrapped in `Ok(_)`
 	///
 	/// By default offchain workers are disabled.
-	fn offchain_worker_config(&self) -> Result<OffchainWorkerConfig> {
-		Ok(Default::default())
+	fn offchain_worker(&self, role: &Role) -> Result<OffchainWorkerConfig> {
+		self.offchain_worker_params()
+			.map(|x| x.offchain_worker(role))
+			.unwrap_or_else(|| { Ok(OffchainWorkerConfig::default()) })
 	}
+
 	/// Returns `Ok(true)` if authoring should be forced
 	///
 	/// By default this is `false`.

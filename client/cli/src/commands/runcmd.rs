@@ -29,9 +29,8 @@ use sc_service::{
 };
 use sc_telemetry::TelemetryEndpoints;
 
-use crate::VersionInfo;
-use crate::error;
-use crate::runtime::run_service_until_exit;
+use structopt::StructOpt;
+use std::net::SocketAddr;
 
 /// The maximum number of characters for a node name.
 const NODE_NAME_MAX_LENGTH: usize = 32;
@@ -412,14 +411,6 @@ impl CliConfiguration for RunCmd {
 			&format!("{}:{}", ws_interface, 9944),
 			self.ws_port,
 		)?))
-	}
-
-	fn offchain_worker_config(&self) -> OffchainWorkerConfig {
-		let is_dev = self.is_dev();
-		let role = self.role(is_dev);
-		self.offchain_worker_params
-			.map(|params| { params.into_config(role) })
-			.or_else(|| { OffchainWorkerConfig::default() })
 	}
 
 	fn transaction_pool(&self) -> Result<TransactionPoolOptions> {
