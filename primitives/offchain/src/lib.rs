@@ -36,3 +36,16 @@ sp_api::decl_runtime_apis! {
 		fn offchain_worker(header: &Block::Header);
 	}
 }
+
+
+#[cfg(test)]
+mod test {
+
+	use super::*;
+
+	#[test]
+	fn offchain_storage_prefixes_in_sync() {
+		use sp_state_machine::Ext::OFFCHAIN_STORAGE_PREFIX;
+		assert_eq!(STORAGE_PREFIX, OFFCHAIN_STORAGE_PREFIX);
+	}
+}
