@@ -24,7 +24,7 @@ use crate::{
 
 use hash_db::Hasher;
 use sp_core::{
-	offchain::storage::OffchainOverlayedChanges,
+	offchain::{self, storage::OffchainOverlayedChanges},
 	storage::{ChildStorageKey, well_known_keys::is_child_storage_key, ChildInfo},
 	traits::Externalities, hexdisplay::HexDisplay,
 };
@@ -607,8 +607,8 @@ mod tests {
 
 	fn prepare_offchain_overlay_with_changes() -> OffchainOverlayedChanges {
 		let mut ooc = OffchainOverlayedChanges::enabled();
-		ooc.set(OffchainOverlayedChanges::PERSISTENT, b"k1", b"v1");
-		ooc.set(OffchainOverlayedChanges::PERSISTENT, b"k2", b"v2");
+		ooc.set(offchain::STORAGE_PREFIX, b"k1", b"v1");
+		ooc.set(offchain::STORAGE_PREFIX, b"k2", b"v2");
 		ooc
 	}
 
