@@ -106,9 +106,6 @@ impl Default for OffchainOverlayedChanges {
 }
 
 impl OffchainOverlayedChanges {
-	/// Helper definition to avoid redefinitions
-	pub const PERSISTENT: &'static [u8] = b"storage";
-
 	/// Create the disabled variant.
 	pub fn disabled() -> Self {
 		Self::Disabled
@@ -243,33 +240,33 @@ impl<'d> OffchainOverlayedChangesDrain<'d> {
 #[cfg(test)]
 mod test {
 	use super::*;
-	const PREFIX : &[u8] = b"storage";
+	use super::super::STORAGE_PREFIX;
 
 	#[test]
 	fn test_drain() {
 		let mut ooc = OffchainOverlayedChanges::enabled();
-		ooc.set(PREFIX,b"kkk", b"vvv");
+		ooc.set(STORAGE_PREFIX,b"kkk", b"vvv");
 		let drained = ooc.drain().count();
 		assert_eq!(drained, 1);
 		let leftover = ooc.iter().count();
 		assert_eq!(leftover, 0);
 
-		ooc.set(PREFIX, b"a", b"v");
-		ooc.set(PREFIX, b"b", b"v");
-		ooc.set(PREFIX, b"c", b"v");
-		ooc.set(PREFIX, b"d", b"v");
-		ooc.set(PREFIX, b"e", b"v");
+		ooc.set(STORAGE_PREFIX, b"a", b"v");
+		ooc.set(STORAGE_PREFIX, b"b", b"v");
+		ooc.set(STORAGE_PREFIX, b"c", b"v");
+		ooc.set(STORAGE_PREFIX, b"d", b"v");
+		ooc.set(STORAGE_PREFIX, b"e", b"v");
 		assert_eq!(ooc.iter().count(), 5);
 	}
 
 	#[test]
 	fn test_accumulated_set_remove_set() {
 		let mut ooc = OffchainOverlayedChanges::enabled();
-		ooc.set(PREFIX, b"ppp", b"qqq");
-		ooc.remove(PREFIX, b"ppp");
+		ooc.set(STORAGE_PREFIX, b"ppp", b"qqq");
+		ooc.remove(STORAGE_PREFIX, b"ppp");
 		assert_eq!(ooc.iter().count(), 0);
 
-		ooc.set(PREFIX,b"ppp", b"rrr");
+		ooc.set(STORAGE_PREFIX,b"ppp", b"rrr");
 		let mut iter = ooc.into_iter();
 		assert_eq!(iter.next(), Some((b"ppp".to_vec(),OffchainOverlayedChange::SetValue(b"rrr".to_vec()))));
 		assert_eq!(iter.count(), 0);

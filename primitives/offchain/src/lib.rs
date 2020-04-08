@@ -19,8 +19,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![warn(missing_docs)]
 
-/// Local Storage Prefix used by the Offchain Worker API to
-pub const STORAGE_PREFIX: &[u8] = b"storage";
+/// Re-export of parent module scope storage prefix.
+pub use sp_core::offchain::STORAGE_PREFIX as STORAGE_PREFIX;
 
 sp_api::decl_runtime_apis! {
 	/// The offchain worker api.
@@ -34,20 +34,5 @@ sp_api::decl_runtime_apis! {
 		/// Starts the off-chain task for given block header.
 		#[skip_initialize_block]
 		fn offchain_worker(header: &Block::Header);
-	}
-}
-
-
-#[cfg(test)]
-mod test {
-
-	use super::*;
-
-	use sp_state_machine::Ext;
-	use sp_core::blake2::Blake2Hasher;
-		
-	#[test]
-	fn offchain_storage_prefixes_in_sync() {
-		//assert_eq!(STORAGE_PREFIX, Ext::<'_, Blake2Hasher, _, _>::OFFCHAIN_STORAGE_PREFIX);
 	}
 }

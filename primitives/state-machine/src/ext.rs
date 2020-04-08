@@ -126,14 +126,6 @@ where
 	fn mark_dirty(&mut self) {
 		self.storage_transaction_cache.reset();
 	}
-
-	/// Common storage prefix for offchain storage usage.
-	///
-	/// Synonym with `StorageKind::PERSISTENT` and its derived
-	/// storage preifx `sp_offchain::STORAGE_PREFIX` which can
-	/// not be used directly, since it would cause
-	/// a circular dependency.
-	pub const OFFCHAIN_STORAGE_PREFIX : &'static [u8] = b"storage";
 }
 
 #[cfg(test)]
@@ -167,9 +159,10 @@ where
 {
 
 	fn set_offchain_storage(&mut self, key: &[u8], value: Option<&[u8]>) {
+		use ::sp_core::offchain::STORAGE_PREFIX;
 		match value {
-			Some(value) => self.offchain_overlay.set(Self::OFFCHAIN_STORAGE_PREFIX, key, value),
-			None => self.offchain_overlay.remove(Self::OFFCHAIN_STORAGE_PREFIX, key),
+			Some(value) => self.offchain_overlay.set(STORAGE_PREFIX, key, value),
+			None => self.offchain_overlay.remove(STORAGE_PREFIX, key),
 		}
 	}
 

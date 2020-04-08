@@ -7417,8 +7417,8 @@ name = "sp-offchain"
 version = "2.0.0-alpha.5"
 dependencies = [
  "sp-api",
+ "sp-core",
  "sp-runtime",
- "sp-state-machine",
 ]
 
 [[package]]
