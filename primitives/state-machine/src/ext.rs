@@ -126,6 +126,11 @@ where
 	fn mark_dirty(&mut self) {
 		self.storage_transaction_cache.reset();
 	}
+
+	/// Read only accessor for the scheduled overlay changes.
+	pub fn get_offchain_storage_changes(&self) -> &OffchainOverlayedChanges {
+		&*self.offchain_overlay
+	}
 }
 
 #[cfg(test)]

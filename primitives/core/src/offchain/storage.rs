@@ -146,6 +146,16 @@ impl OffchainOverlayedChanges {
 			let _ = storage.insert(key, OffchainOverlayedChange::SetValue(value.to_vec()));
 		}
 	}
+
+	/// Obtain a associated value to the given key in storage with prefix.
+	pub fn get(&self, prefix: &[u8], key: &[u8]) -> Option<OffchainOverlayedChange> {
+		if let Self::Enabled(ref storage) = self {
+			let key: Vec<u8> = prefix.iter().chain(key).cloned().collect();
+			storage.get(&key).cloned()
+		} else {
+			None
+		}
+	}
 }
 
 use std::collections::hash_map;

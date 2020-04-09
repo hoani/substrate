@@ -454,7 +454,7 @@ fn ordered_trie_root_should_work(wasm_method: WasmExecutionMethod) {
 #[cfg_attr(feature = "wasmtime", test_case(WasmExecutionMethod::Compiled))]
 fn offchain_index(wasm_method: WasmExecutionMethod) {
 	let mut ext = TestExternalities::default();
-	let (offchain, state) = testing::TestOffchainExt::new();
+	let (offchain, _state) = testing::TestOffchainExt::new();
 	ext.register_extension(OffchainExt::new(offchain));
 	call_in_wasm(
 			"test_offchain_index_set",
@@ -462,6 +462,14 @@ fn offchain_index(wasm_method: WasmExecutionMethod) {
 			wasm_method,
 			&mut ext.ext(),
 		).unwrap();
+
+	use sp_core::offchain::storage::OffchainOverlayedChange;
+	assert_eq!(
+		ext.ext()
+			.get_offchain_storage_changes()
+			.get(sp_core::offchain::STORAGE_PREFIX, b"k"),
+		Some(OffchainOverlayedChange::SetValue(b"v".to_vec()))
+	);
 }
 
 #[test_case(WasmExecutionMethod::Interpreted)]
