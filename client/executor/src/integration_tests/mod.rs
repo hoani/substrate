@@ -464,7 +464,7 @@ fn offchain_index(wasm_method: WasmExecutionMethod) {
 			wasm_method,
 			&mut ext.ext(),
 		).unwrap();
-	assert_eq!(state.read().local_storage_get(StorageKind::PERSISTENT, b"k"), Some(b"v".to_vec()));
+	assert_eq!(state.read().persistent_storage.get(b"k", b"test"), Some(vec![]));
 }
 
 #[test_case(WasmExecutionMethod::Interpreted)]
