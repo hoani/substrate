@@ -100,6 +100,7 @@ pub struct StorageChanges<Transaction, H: Hasher, N: BlockNumber> {
 	/// A transaction for the backend that contains all changes from
 	/// [`main_storage_changes`](Self::main_storage_changes) and from
 	/// [`child_storage_changes`](Self::child_storage_changes).
+	/// [`offchain_storage_changes`](Self::offchain_storage_changes).
 	pub transaction: Transaction,
 	/// The storage root after applying the transaction.
 	pub transaction_storage_root: H::Out,

@@ -186,7 +186,6 @@ sp_core::wasm_export_functions! {
 
 	fn test_offchain_index_set() {
 		sp_io::offchain_index::set(b"k", b"v");
-		// TODO assert stuff
 	}
 
 
