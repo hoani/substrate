@@ -4689,7 +4689,7 @@ dependencies = [
 [[package]]
 name = "parity-db"
 version = "0.0.1"
-source = "git+https://github.com/paritytech/parity-db#d3fb2a405c04aa85fbee679a47f3ddbdad388998"
+source = "git+https://github.com/paritytech/parity-db#49a29054425729740dcfd6cdae49060f6c934b0f"
 dependencies = [
  "blake2-rfc",
  "libc",
